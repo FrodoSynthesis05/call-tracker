@@ -10,6 +10,8 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -21,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -125,11 +128,11 @@ public static void main(String[] args) {
 
 			} catch (UnsupportedLookAndFeelException e) {
 			}
-			Work interfaz = new Work();
+
 			if (SystemTray.isSupported()) {
 				SwingUtilities.invokeLater(() -> {
 					createTrayIcon();
-					interfaz.setVisible(true);
+
 				});
 			} else {
 				System.out.println("System tray is not supported.");
@@ -152,46 +155,69 @@ public static void main(String[] args) {
 }
 
 private static void createTrayIcon() {
-	// Create a system tray icon
-	SystemTray tray = SystemTray.getSystemTray();
-	Image image = Toolkit.getDefaultToolkit().getImage("D://WorkCalculator//Work//src//main//java//resources//stopwatch.png");
-	PopupMenu popupMenu = new PopupMenu();
-
-	// Add a menu item to open the website
-	MenuItem websiteMenuItem = new MenuItem("Open Database");
-	websiteMenuItem.addActionListener((ActionEvent e) -> {
-		try {
-			Desktop.getDesktop().browse(new URI("http://localhost/phpmyadmin/index.php?route=/sql&db=work&table=calls&pos=0"));
-		} catch (URISyntaxException | IOException ex) {
-			Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	});
-	popupMenu.add(websiteMenuItem);
-
-	// Add a menu item to delete screenshots
-	MenuItem deleteScreenshotsMenuItem = new MenuItem("Delete Screenshots");
-	deleteScreenshotsMenuItem.addActionListener(e -> {
-		try {
-			Work work = new Work();
-			work.close();
-		} catch (IOException ex) {
-			Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	});
-	popupMenu.add(deleteScreenshotsMenuItem);
-
-	// Add a menu item to exit the application
-	MenuItem exitMenuItem = new MenuItem("Exit");
-	exitMenuItem.addActionListener(e -> System.exit(0));
-	popupMenu.add(exitMenuItem);
-
-	TrayIcon trayIcon = new TrayIcon(image, "Work", popupMenu);
-	trayIcon.setImageAutoSize(true);
-
 	try {
-		tray.add(trayIcon);
-	} catch (AWTException e) {
-		System.out.println("TrayIcon could not be added.");
+
+		SystemTray tray = SystemTray.getSystemTray();
+		Image image = Toolkit.getDefaultToolkit().getImage("D://WorkCalculator//Work//src//main//java//resources//stopwatch.png");
+		PopupMenu popupMenu = new PopupMenu();
+
+		MenuItem websiteMenuItem = new MenuItem("Open Database");
+		websiteMenuItem.addActionListener((ActionEvent e) -> {
+			try {
+				Desktop.getDesktop().browse(new URI("http://localhost/phpmyadmin/index.php?route=/sql&db=work&table=calls&pos=0"));
+			} catch (URISyntaxException | IOException ex) {
+				Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		});
+		popupMenu.add(websiteMenuItem);
+
+		MenuItem deleteScreenshotsMenuItem = new MenuItem("Delete Screenshots");
+		deleteScreenshotsMenuItem.addActionListener(e -> {
+			try {
+				Work work = new Work();
+				work.close();
+			} catch (IOException ex) {
+				Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		});
+		popupMenu.add(deleteScreenshotsMenuItem);
+
+		MenuItem exitMenuItem = new MenuItem("Exit");
+		exitMenuItem.addActionListener(e -> System.exit(0));
+		popupMenu.add(exitMenuItem);
+
+		TrayIcon trayIcon = new TrayIcon(image, "Work", popupMenu);
+		trayIcon.setImageAutoSize(true);
+
+		AtomicInteger clickCount = new AtomicInteger(0);
+		Work interfaz = new Work();
+		interfaz.setVisible(false);
+		trayIcon.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				if (clickCount.incrementAndGet() == 2) {
+
+					if (interfaz.isVisible()) {
+						interfaz.setVisible(false);
+					} else {
+						interfaz.setVisible(true);
+					}
+					clickCount.set(0);
+				}
+
+			}
+
+		}
+		});
+
+		try {
+			tray.add(trayIcon);
+		} catch (AWTException e) {
+			System.out.println("TrayIcon could not be added.");
+		}
+	} catch (IOException ex) {
+		Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
 	}
 }
 
