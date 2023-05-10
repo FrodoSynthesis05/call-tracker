@@ -535,7 +535,8 @@ public void onHotKey(int i) {
 }
 
 /**
- * Not used in current implementation. 
+ * Not used in current implementation.
+ *
  * @param i null
  */
 @Override
@@ -544,6 +545,7 @@ public void onIntellitype(int i) {
 
 /**
  * Updates text on the JTextArea under the JCalendar on the Income window.
+ *
  * @param text Text to be inserted into the text area.
  */
 public void updateText(String text) {
@@ -552,8 +554,9 @@ public void updateText(String text) {
 }
 
 /**
- * Checks that the ID number returned by OCR contains numbers only,
-different behaviors are triggered depending on the output of this method.
+ * Checks that the ID number returned by OCR contains numbers only, different
+ * behaviors are triggered depending on the output of this method.
+ *
  * @param str String to be assessed for numbers
  * @return true if string is only comprised of numbers, otherwise false.
  */
