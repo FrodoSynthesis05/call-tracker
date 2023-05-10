@@ -138,14 +138,36 @@ public String queryCall(String id) throws IOException {
 	return query.queryCall(id);
 }
 
+/**
+ * Gets timestamp for a particular call.
+ *
+ * @param id Call to be queried
+ * @return Timestamp in the database
+ * @throws IOException IF retrieval process fails.
+ */
 public String getTimestamp(String id) throws IOException {
 	return query.getTimestamp(id);
 }
 
+/**
+ * Overrides all call information, length, pesos and dollars
+ * @param id Call to be overridden.
+ * @param length length parameter to be added.
+ * @param pesos pesos parameter to be added.
+ * @param dollars dollars parameter to be added.
+ * @throws IOException If process fails.
+ */
 public void override(String id, double length, String pesos, String dollars) throws IOException {
 	query.override(id, length, pesos, dollars);
 }
 
+/**
+ * Queries main API method and converts the value 
+ that is passed into pesos.
+ * @param amount The dollar amount to be converted.
+ * @return Converted value in pesos.
+ * @throws IOException If process fails.
+ */
 public double API(double amount) throws IOException {
 	return query.API() * amount;
 }

@@ -66,7 +66,6 @@ public class PanelBotones extends JPanel implements ActionListener, HotkeyListen
 
 private final JButton start;
 private final JButton stop;
-//private final JButton reset;
 Controller ctrl;
 private String out;
 private final StopWatch stopWatch;
@@ -133,7 +132,6 @@ public void actionPerformed(ActionEvent e) {
 				if (checker != 1) {
 					out = Tesseract(sc.Screenshot());
 				} else {
-					//System.out.println("A call is already being tracked. ");
 				}
 			} catch (IOException ex) {
 				Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
