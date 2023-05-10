@@ -46,6 +46,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.concurrent.CompletableFuture;
@@ -508,7 +509,7 @@ public void onHotKey(int i) {
 			Color backgroundColor = textArea.getBackground();
 			textArea.setCaretColor(backgroundColor);
 			newFrame.add(query);
-			cal.addPropertyChangeListener(e -> {
+			cal.addPropertyChangeListener((PropertyChangeEvent e) -> {
 				if (e.getPropertyName().equals("calendar")) {
 
 					Date selectedDate = cal.getDate();
