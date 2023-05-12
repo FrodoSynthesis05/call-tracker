@@ -151,6 +151,7 @@ public String getTimestamp(String id) throws IOException {
 
 /**
  * Overrides all call information, length, pesos and dollars
+ *
  * @param id Call to be overridden.
  * @param length length parameter to be added.
  * @param pesos pesos parameter to be added.
@@ -162,14 +163,26 @@ public void override(String id, double length, String pesos, String dollars) thr
 }
 
 /**
- * Queries main API method and converts the value 
- that is passed into pesos.
+ * Queries main API method and converts the value that is passed into pesos.
+ *
  * @param amount The dollar amount to be converted.
  * @return Converted value in pesos.
  * @throws IOException If process fails.
  */
 public double API(double amount) throws IOException {
 	return query.API() * amount;
+}
+
+/**
+ * Links SQL.queryMonth with the rest of the program.
+ *
+ * @param month Month to be queried
+ * @param year
+ * @return String of processed data.
+ */
+public String queryMonth(int month, int year) {
+	return query.queryMonth(month, year);
+
 }
 
 }

@@ -37,6 +37,7 @@ import com.melloware.jintellitype.IntellitypeListener;
 import com.melloware.jintellitype.JIntellitype;
 import javax.swing.JFrame;
 import com.toedter.calendar.JCalendar;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -472,26 +473,37 @@ public void onHotKey(int i) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					String input = query.getText();
 
-					CompletableFuture.supplyAsync(() -> {
-						try {
-							return ctrl.queryCall(input);
-						} catch (IOException ex) {
-							Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-							return null;
-						}
-					}).thenAccept(result -> {
-						updateText(result);
-						try {
-							Date date = dateFormat.parse(ctrl.getTimestamp(input));
-							Calendar c = Calendar.getInstance();
-							c.setTime(date);
-							cal.setCalendar(c);
-						} catch (IOException | ParseException ex) {
-							Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-						}
-					});
+					if (input.equals("month")) {
+						Calendar calendar = cal.getCalendar();
+						int currentYear = calendar.get(Calendar.YEAR);
+						int currentMonth = calendar.get(Calendar.MONTH) + 1;
+						CompletableFuture.runAsync(() -> {
+							String result = ctrl.queryMonth(currentMonth, currentYear);
+							updateText(result);
+						});
+					} else {
+						CompletableFuture.supplyAsync(() -> {
+							try {
+								return ctrl.queryCall(input);
+							} catch (IOException ex) {
+								Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+								return null;
+							}
+						}).thenAccept(result -> {
+							updateText(result);
+							try {
+								Date date = dateFormat.parse(ctrl.getTimestamp(input));
+								Calendar c = Calendar.getInstance();
+								c.setTime(date);
+								cal.setCalendar(c);
+							} catch (IOException | ParseException ex) {
+								Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+							}
+						});
+					}
 				}
 			}
+
 			});
 
 			newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
