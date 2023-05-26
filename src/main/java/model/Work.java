@@ -199,19 +199,6 @@ private static void createTrayIcon() {
 		});
 		popupMenu.add(deleteScreenshotsMenuItem);
 
-		MenuItem openFolderItem = new MenuItem("Open Screenshot Folder");
-
-		openFolderItem.addActionListener(e -> {
-
-			try {
-
-				Runtime.getRuntime().exec("explorer.exe /select," + destinationFolder);
-			} catch (IOException ex) {
-			}
-		});
-
-		popupMenu.add(openFolderItem);
-
 		MenuItem exitMenuItem = new MenuItem("Exit");
 		exitMenuItem.addActionListener(e -> System.exit(0));
 		popupMenu.add(exitMenuItem);
