@@ -59,7 +59,7 @@ PanelBotones pnlBotones = new PanelBotones();
 public Work() throws IOException {
 
 	try {
-		String stonksPath = iconPackPath + "//stonks.png";
+		String stonksPath = iconPackPath + "//stopwatch.png";
 		setIconImage(ImageIO.read(new File(stonksPath)));
 	} catch (IOException ex) {
 		Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
