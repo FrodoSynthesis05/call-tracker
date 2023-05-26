@@ -91,33 +91,33 @@ private final static String tesseract = configReader.getTesseract();
  */
 public PanelBotones() {
 
-	this.stopWatch = new StopWatch();
-	this.ctrl = new Controller();
-	this.sc = new Screenshot();
+    this.stopWatch = new StopWatch();
+    this.ctrl = new Controller();
+    this.sc = new Screenshot();
 
-	setLayout(null);
+    setLayout(null);
 
-	start = new JButton("\u23F5");
-	start.setFont(font);
-	start.setBounds(0, 0, 40, 40);
-	add(start);
+    start = new JButton("\u23F5");
+    start.setFont(font);
+    start.setBounds(0, 0, 40, 40);
+    add(start);
 
-	stop = new JButton("\u23F9");
-	stop.setFont(font);
-	stop.setBounds(0, 57, 40, 40);
-	add(stop);
+    stop = new JButton("\u23F9");
+    stop.setFont(font);
+    stop.setBounds(0, 57, 40, 40);
+    add(stop);
 
-	btnRegisterHotKey_actionPerformed();
+    btnRegisterHotKey_actionPerformed();
 
-	start.addActionListener(e -> actionPerformed(e));
-	stop.addActionListener(a -> {
-		try {
-			ActionPerformed(a);
-		} catch (IOException ex) {
-			Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	});
-	ctrl.conexion();
+    start.addActionListener(e -> actionPerformed(e));
+    stop.addActionListener(a -> {
+        try {
+            ActionPerformed(a);
+        } catch (IOException ex) {
+            Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    });
+    ctrl.conexion();
 
 }
 
@@ -129,45 +129,52 @@ public PanelBotones() {
  */
 @Override
 public void actionPerformed(ActionEvent e) {
-	CompletableFuture.supplyAsync(() -> {
-		try {
-			try {
-				if (checker != 1) {
-					out = Tesseract(sc.Screenshot());
-				} else {
-				}
-			} catch (IOException ex) {
-				Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-			}
-			return out;
-		} catch (TesseractException ex) {
-			Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
-			return "";
-		}
-	}).thenAcceptAsync((String result) -> {
-		try {
-			if (!"".equals(result) && containsOnlyNumbers(result) && checker != 1) {
-				if (containsOnlyNumbers(result)) {
-					checker = 1;
-					execute();
-					String path = iconPackPath + "//start.wav";
-					reminder(path);
-				}
-			} else if (checker == 1) {
-				System.out.println("A call is already being tracked. ");
-			} else {
-				try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
-					System.out.println("Invalid call ID, please try again.");
-					output.append("Invalid call ID, please try again.");
-					output.newLine();
-				} catch (IOException ex) {
-					Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-				}
-			}
-		} catch (UnsupportedAudioFileException | InterruptedException | IOException ex) {
-			Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	});
+    CompletableFuture.supplyAsync(() -> {
+        try {
+            try {
+                if (checker != 1) {
+                    out = Tesseract(sc.Screenshot());
+                } else {
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return out;
+        } catch (TesseractException ex) {
+            Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
+            return "";
+        }
+    }).thenAcceptAsync((String result) -> {
+        try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
+            if (!"".equals(result) && containsOnlyNumbers(result) && checker != 1) {
+                if (containsOnlyNumbers(result)) {
+                    checker = 1;
+                    execute();
+                    String path = iconPackPath + "//start.wav";
+                    reminder(path);
+                }
+            } else if (checker == 1) {
+                System.out.println("A call is already being tracked. ");
+                output.append("-----------------------------");
+                output.newLine();
+                output.append("A call is already being tracked. ");
+                output.newLine();
+                output.append("-----------------------------");
+                output.newLine();
+            } else {
+
+                System.out.println("Invalid call ID, please try again.");
+                output.append("-----------------------------");
+                output.newLine();
+                output.append("Invalid call ID, please try again.");
+                output.newLine();
+                output.append("-----------------------------");
+                output.newLine();
+            }
+        } catch (UnsupportedAudioFileException | InterruptedException | IOException ex) {
+            Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    });
 }
 
 /**
@@ -180,26 +187,26 @@ public void actionPerformed(ActionEvent e) {
  * @throws java.io.IOException
  */
 public void execute() throws IOException {
-	CompletableFuture.runAsync(() -> {
-		try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
-			try {
-				stopWatch.start();
-			} catch (IllegalStateException ec) {
-				System.out.println("Stopwatch is most likely running already.");
-				output.append("Stopwatch is most likely running already.");
-				output.newLine();
-				return;
-			}
-			Date time = new java.util.Date(System.currentTimeMillis());
-			System.out.println("Started tracking call " + out + " on date " + new SimpleDateFormat("yyyy-MM-dd").format(time) + " at " + new SimpleDateFormat("HH:mm:ss").format(time));
-			output.append("Started tracking call " + out + " on date " + new SimpleDateFormat("yyyy-MM-dd").format(time) + " at " + new SimpleDateFormat("HH:mm:ss").format(time));
-			output.newLine();
-		} catch (IOException ex) {
-			Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}).thenRunAsync(() -> {
-		ctrl.uploadID(out);
-	});
+    CompletableFuture.runAsync(() -> {
+        try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
+            try {
+                stopWatch.start();
+            } catch (IllegalStateException ec) {
+                System.out.println("Stopwatch is most likely running already.");
+                output.append("Stopwatch is most likely running already.");
+                output.newLine();
+                return;
+            }
+            Date time = new java.util.Date(System.currentTimeMillis());
+            System.out.println("Started tracking call " + out + " on date " + new SimpleDateFormat("yyyy-MM-dd").format(time) + " at " + new SimpleDateFormat("HH:mm:ss").format(time));
+            output.append("Started tracking call " + out + " on date " + new SimpleDateFormat("yyyy-MM-dd").format(time) + " at " + new SimpleDateFormat("HH:mm:ss").format(time));
+            output.newLine();
+        } catch (IOException ex) {
+            Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }).thenRunAsync(() -> {
+        ctrl.uploadID(out);
+    });
 }
 
 /**
@@ -213,40 +220,44 @@ public void execute() throws IOException {
  * @throws java.io.IOException
  */
 public void ActionPerformed(ActionEvent a) throws IOException {
-	CompletableFuture.runAsync(() -> {
-		try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
-			if (checker != 0) {
-				long time = Math.round(TimeUnit.MILLISECONDS.toMinutes(stopWatch.getTime()));
-				try {
-					stopWatch.reset();
-				} catch (IllegalStateException ex) {
-					System.out.println("StopWatch is not running.");
-					output.append("StopWatch is not running.");
-					output.newLine();
-					return;
-				}
+    CompletableFuture.runAsync(() -> {
+        try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
+            if (checker != 0) {
+                long time = Math.round(TimeUnit.MILLISECONDS.toMinutes(stopWatch.getTime()));
+                try {
+                    stopWatch.reset();
+                } catch (IllegalStateException ex) {
+                    System.out.println("StopWatch is not running.");
+                    output.append("StopWatch is not running.");
+                    output.newLine();
+                    return;
+                }
 
-				ctrl.uploadLength(out, time);
-				ctrl.dollars(out);
-				ctrl.readPesos(out);
-				ctrl.timestamp(out, sc.getTimeStamp());
+                ctrl.uploadLength(out, time);
+                ctrl.dollars(out);
+                ctrl.readPesos(out);
+                ctrl.timestamp(out, sc.getTimeStamp());
 
-				try {
-					String path = iconPackPath + "//sound.wav";
-					reminder(path);
-					checker = 0;
-				} catch (UnsupportedAudioFileException | IOException | InterruptedException ex) {
-					Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-				}
-			} else {
-				output.append("There are no calls being tracked right now.");
-				output.newLine();
-				System.out.println("There are no calls being tracked right now.");
-			}
-		} catch (IOException ex) {
-			Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	});
+                try {
+                    String path = iconPackPath + "//sound.wav";
+                    reminder(path);
+                    checker = 0;
+                } catch (UnsupportedAudioFileException | IOException | InterruptedException ex) {
+                    Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                output.append("-----------------------------");
+                output.newLine();
+                output.append("There are no calls being tracked right now.");
+                output.newLine();
+                output.append("-----------------------------");
+                output.newLine();
+                System.out.println("There are no calls being tracked right now.");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    });
 }
 
 /**
@@ -260,19 +271,19 @@ public void ActionPerformed(ActionEvent a) throws IOException {
  */
 public void reminder(String path) throws UnsupportedAudioFileException, IOException, InterruptedException {
 
-	String soundName = path;
-	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-	Clip clip;
-	try {
-		clip = AudioSystem.getClip();
-		clip.open(audioInputStream);
-		FloatControl gainControl
-			= (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue(-20.0f); // Reduce volume by 10 decibels.
-		clip.start();
-	} catch (LineUnavailableException ex) {
-		Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-	}
+    String soundName = path;
+    AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+    Clip clip;
+    try {
+        clip = AudioSystem.getClip();
+        clip.open(audioInputStream);
+        FloatControl gainControl
+                = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(-20.0f); // Reduce volume by 10 decibels.
+        clip.start();
+    } catch (LineUnavailableException ex) {
+        Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+    }
 
 }
 
@@ -287,25 +298,25 @@ public void reminder(String path) throws UnsupportedAudioFileException, IOExcept
  * @throws java.io.IOException
  */
 public static String Tesseract(File Image) throws TesseractException, IOException {
-	Rectangle bounds = new Rectangle(245, 328, 73, 20);
-	Tesseract tess = new Tesseract();
-	String tessPath = tesseract;
-	tess.setDatapath(tessPath);
-	String text = tess.doOCR(Image, bounds);
+    Rectangle bounds = new Rectangle(245, 328, 73, 20);
+    Tesseract tess = new Tesseract();
+    String tessPath = tesseract;
+    tess.setDatapath(tessPath);
+    String text = tess.doOCR(Image, bounds);
 
-	return text.replaceAll("\n", "");
+    return text.replaceAll("\n", "");
 }
 
 /**
  * Initialize the JInitellitype library making sure the DLL is located.
  */
 public void initJIntellitype() {
-	try {
-		JIntellitype.getInstance().addHotKeyListener(this);
-		JIntellitype.getInstance().addIntellitypeListener(this);
-	} catch (RuntimeException ex) {
-		System.out.println("Either you are not on Windows, or there is a problem with the JIntellitype library!");
-	}
+    try {
+        JIntellitype.getInstance().addHotKeyListener(this);
+        JIntellitype.getInstance().addIntellitypeListener(this);
+    } catch (RuntimeException ex) {
+        System.out.println("Either you are not on Windows, or there is a problem with the JIntellitype library!");
+    }
 }
 
 /**
@@ -316,9 +327,9 @@ public void initJIntellitype() {
  */
 private void btnRegisterHotKey_actionPerformed() {
 
-	JIntellitype.getInstance().registerHotKey(SEMICOLON, 0, 186);
-	JIntellitype.getInstance().registerHotKey(TILDE, 0, 222);
-	JIntellitype.getInstance().registerHotKey(ALT_S, JIntellitype.MOD_ALT, 83);
+    JIntellitype.getInstance().registerHotKey(SEMICOLON, 0, 186);
+    JIntellitype.getInstance().registerHotKey(TILDE, 0, 222);
+    JIntellitype.getInstance().registerHotKey(ALT_S, JIntellitype.MOD_ALT, 83);
 
 }
 
@@ -331,220 +342,220 @@ private void btnRegisterHotKey_actionPerformed() {
 @Override
 public void onHotKey(int i) {
 
-	switch (i) {
-		case 94 -> {
+    switch (i) {
+        case 94 -> {
 
-			ActionEvent e = null;
-			actionPerformed(e);
-		}
-		case 96 -> {
-			try {
-				ActionEvent a = null;
-				ActionPerformed(a);
-			} catch (IOException ex) {
-				Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-			}
+            ActionEvent e = null;
+            actionPerformed(e);
+        }
+        case 96 -> {
+            try {
+                ActionEvent a = null;
+                ActionPerformed(a);
+            } catch (IOException ex) {
+                Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-		}
-		case 97 -> {
+        }
+        case 97 -> {
 
-			textArea = new JTextArea();
-			cal = new JCalendar();
-			dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            textArea = new JTextArea();
+            cal = new JCalendar();
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //textField.setBorder(BorderFactory.createLineBorder(Color.black));
-			JFrame newFrame = new JFrame("Income");
-			try {
-				newFrame.setIconImage(ImageIO.read(new File(iconPackPath + "//icon.png")));
-			} catch (IOException ex) {
-				Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-			}
-			newFrame.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
+            JFrame newFrame = new JFrame("Income");
+            try {
+                newFrame.setIconImage(ImageIO.read(new File(iconPackPath + "//icon.png")));
+            } catch (IOException ex) {
+                Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            newFrame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
 
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					newFrame.dispose();
-				}
-				if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_O) {
-					pesosField = new JTextField();
-					dollarsField = new JTextField();
-					lengthField = new JTextField();
-					idField = new JTextField();
-					JDialog dialog = new JDialog(newFrame, "Override", true);
-					dialog.setLocationRelativeTo(null);
-					dialog.setPreferredSize(new Dimension(200, 100));
-					dialog.setLayout(new GridLayout(4, 2));
-					dialog.add(new JLabel("ID:"));
-					dialog.add(idField);
-					dialog.add(new JLabel("Length:"));
-					dialog.add(lengthField);
-					dialog.add(new JLabel("Pesos:"));
-					dialog.add(pesosField);
-					dialog.add(new JLabel("Dollars:"));
-					dialog.add(dollarsField);
-					idField.setHorizontalAlignment(SwingConstants.CENTER);
-					lengthField.setHorizontalAlignment(SwingConstants.CENTER);
-					lengthField.addKeyListener(new KeyAdapter() {
-					@Override
-					public void keyPressed(KeyEvent e) {
-						if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-							try {
-								double callDollars = Math.round(Integer.parseInt(lengthField.getText()) * 0.14);
-								System.out.println(callDollars);
-								dollarsField.setText(String.valueOf(callDollars));
-								double callPesos = Math.round(ctrl.API(callDollars));
-								pesosField.setText(String.valueOf(callPesos));
-							} catch (IOException ex) {
-								Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-							}
-						}
-					}
-					});
-					pesosField.setHorizontalAlignment(SwingConstants.CENTER);
-					dollarsField.setHorizontalAlignment(SwingConstants.CENTER);
-					Color backgroundColor = idField.getBackground();
-					idField.setCaretColor(backgroundColor);
-					lengthField.setCaretColor(backgroundColor);
-					pesosField.setCaretColor(backgroundColor);
-					dollarsField.setCaretColor(backgroundColor);
-					dollarsField.addKeyListener(new KeyAdapter() {
-					@Override
-					public void keyPressed(KeyEvent e) {
-						if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-							CompletableFuture.supplyAsync(() -> {
-								try {
-									double length = Double.parseDouble(lengthField.getText());
-									ctrl.override(idField.getText(), length, pesosField.getText(), dollarsField.getText());
-									return "Call information successfully overridden.";
-								} catch (IOException ex) {
-									Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-									return "An error occurred while overriding call information.";
-								}
-							}).thenAccept(result -> {
-								idField.setText("");
-								lengthField.setText("");
-								dollarsField.setText("");
-								pesosField.setText("");
-								updateText(result);
-								dialog.dispose();
-							});
-						}
-					}
-					});
-					dialog.setUndecorated(false);
-					dialog.setResizable(false);
-					dialog.pack();
-					dialog.setVisible(true);
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    newFrame.dispose();
+                }
+                if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_O) {
+                    pesosField = new JTextField();
+                    dollarsField = new JTextField();
+                    lengthField = new JTextField();
+                    idField = new JTextField();
+                    JDialog dialog = new JDialog(newFrame, "Override", true);
+                    dialog.setLocationRelativeTo(null);
+                    dialog.setPreferredSize(new Dimension(200, 100));
+                    dialog.setLayout(new GridLayout(4, 2));
+                    dialog.add(new JLabel("ID:"));
+                    dialog.add(idField);
+                    dialog.add(new JLabel("Length:"));
+                    dialog.add(lengthField);
+                    dialog.add(new JLabel("Pesos:"));
+                    dialog.add(pesosField);
+                    dialog.add(new JLabel("Dollars:"));
+                    dialog.add(dollarsField);
+                    idField.setHorizontalAlignment(SwingConstants.CENTER);
+                    lengthField.setHorizontalAlignment(SwingConstants.CENTER);
+                    lengthField.addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                            try {
+                                double callDollars = Math.round(Integer.parseInt(lengthField.getText()) * 0.14);
+                                System.out.println(callDollars);
+                                dollarsField.setText(String.valueOf(callDollars));
+                                double callPesos = Math.round(ctrl.API(callDollars));
+                                pesosField.setText(String.valueOf(callPesos));
+                            } catch (IOException ex) {
+                                Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                    });
+                    pesosField.setHorizontalAlignment(SwingConstants.CENTER);
+                    dollarsField.setHorizontalAlignment(SwingConstants.CENTER);
+                    Color backgroundColor = idField.getBackground();
+                    idField.setCaretColor(backgroundColor);
+                    lengthField.setCaretColor(backgroundColor);
+                    pesosField.setCaretColor(backgroundColor);
+                    dollarsField.setCaretColor(backgroundColor);
+                    dollarsField.addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                            CompletableFuture.supplyAsync(() -> {
+                                try {
+                                    double length = Double.parseDouble(lengthField.getText());
+                                    ctrl.override(idField.getText(), length, pesosField.getText(), dollarsField.getText());
+                                    return "Call information successfully overridden.";
+                                } catch (IOException ex) {
+                                    Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+                                    return "An error occurred while overriding call information.";
+                                }
+                            }).thenAccept(result -> {
+                                idField.setText("");
+                                lengthField.setText("");
+                                dollarsField.setText("");
+                                pesosField.setText("");
+                                updateText(result);
+                                dialog.dispose();
+                            });
+                        }
+                    }
+                    });
+                    dialog.setUndecorated(false);
+                    dialog.setResizable(false);
+                    dialog.pack();
+                    dialog.setVisible(true);
 
-				}
-			}
+                }
+            }
 
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-			});
-			newFrame.setFocusable(true);
-			newFrame.requestFocus();
-			newFrame.setLayout(new FlowLayout());
-			JTextField query = new JTextField();
-			query.setText("?");
-			query.setFont(font);
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+            });
+            newFrame.setFocusable(true);
+            newFrame.requestFocus();
+            newFrame.setLayout(new FlowLayout());
+            JTextField query = new JTextField();
+            query.setText("?");
+            query.setFont(font);
 
-			query.setAlignmentX(BOTTOM_ALIGNMENT);
+            query.setAlignmentX(BOTTOM_ALIGNMENT);
 //query.setBorder(BorderFactory.createLineBorder(Color.black));
-			Dimension size = new Dimension(80, 30);
-			query.setPreferredSize(size);
-			query.setHorizontalAlignment(SwingConstants.CENTER);
-			query.addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				query.setText("");
-			}
+            Dimension size = new Dimension(80, 30);
+            query.setPreferredSize(size);
+            query.setHorizontalAlignment(SwingConstants.CENTER);
+            query.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                query.setText("");
+            }
 
-			@Override
-			public void focusLost(FocusEvent e) {
+            @Override
+            public void focusLost(FocusEvent e) {
 // do nothing
-			}
-			});
-			query.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					String input = query.getText();
+            }
+            });
+            query.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String input = query.getText();
 
-					if (input.equals("month")) {
-						Calendar calendar = cal.getCalendar();
-						int currentYear = calendar.get(Calendar.YEAR);
-						int currentMonth = calendar.get(Calendar.MONTH) + 1;
-						CompletableFuture.runAsync(() -> {
-							String result = ctrl.queryMonth(currentMonth, currentYear);
-							updateText(result);
-						});
-					} else {
-						CompletableFuture.supplyAsync(() -> {
-							try {
-								return ctrl.queryCall(input);
-							} catch (IOException ex) {
-								Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-								return null;
-							}
-						}).thenAccept(result -> {
-							updateText(result);
-							try {
-								Date date = dateFormat.parse(ctrl.getTimestamp(input));
-								Calendar c = Calendar.getInstance();
-								c.setTime(date);
-								cal.setCalendar(c);
-							} catch (IOException | ParseException ex) {
-								Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-							}
-						});
-					}
-				}
-			}
+                    if (input.equals("month")) {
+                        Calendar calendar = cal.getCalendar();
+                        int currentYear = calendar.get(Calendar.YEAR);
+                        int currentMonth = calendar.get(Calendar.MONTH) + 1;
+                        CompletableFuture.runAsync(() -> {
+                            String result = ctrl.queryMonth(currentMonth, currentYear);
+                            updateText(result);
+                        });
+                    } else {
+                        CompletableFuture.supplyAsync(() -> {
+                            try {
+                                return ctrl.queryCall(input);
+                            } catch (IOException ex) {
+                                Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+                                return null;
+                            }
+                        }).thenAccept(result -> {
+                            updateText(result);
+                            try {
+                                Date date = dateFormat.parse(ctrl.getTimestamp(input));
+                                Calendar c = Calendar.getInstance();
+                                c.setTime(date);
+                                cal.setCalendar(c);
+                            } catch (IOException | ParseException ex) {
+                                Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        });
+                    }
+                }
+            }
 
-			});
+            });
 
-			newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			newFrame.setSize(415, 465);
-			newFrame.setLocationRelativeTo(null);
-			newFrame.setVisible(true);
-			cal.setPreferredSize(new Dimension(400, 300));
-			textArea.setSize(350, 300);
-			newFrame.add(cal);
-			newFrame.add(textArea);
-			newFrame.setResizable(false);
-			textArea.setEditable(false);
-			Color backgroundColor = textArea.getBackground();
-			textArea.setCaretColor(backgroundColor);
-			newFrame.add(query);
-			cal.addPropertyChangeListener((PropertyChangeEvent e) -> {
-				if (e.getPropertyName().equals("calendar")) {
+            newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            newFrame.setSize(415, 465);
+            newFrame.setLocationRelativeTo(null);
+            newFrame.setVisible(true);
+            cal.setPreferredSize(new Dimension(400, 300));
+            textArea.setSize(350, 300);
+            newFrame.add(cal);
+            newFrame.add(textArea);
+            newFrame.setResizable(false);
+            textArea.setEditable(false);
+            Color backgroundColor = textArea.getBackground();
+            textArea.setCaretColor(backgroundColor);
+            newFrame.add(query);
+            cal.addPropertyChangeListener((PropertyChangeEvent e) -> {
+                if (e.getPropertyName().equals("calendar")) {
 
-					Date selectedDate = cal.getDate();
+                    Date selectedDate = cal.getDate();
 
-					String dateString = dateFormat.format(selectedDate);
-					try {
-						updateText(ctrl.queryDay(dateString));
-					} catch (IOException ex) {
-						Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-					}
-					try {
-						ctrl.queryDay(dateFormat.format(selectedDate));
-					} catch (IOException ex) {
-						Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
-					}
-				}
-			});
+                    String dateString = dateFormat.format(selectedDate);
+                    try {
+                        updateText(ctrl.queryDay(dateString));
+                    } catch (IOException ex) {
+                        Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    try {
+                        ctrl.queryDay(dateFormat.format(selectedDate));
+                    } catch (IOException ex) {
+                        Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
 
-		}
+        }
 
-		default -> {
-		}
-	}
+        default -> {
+        }
+    }
 }
 
 /**
@@ -562,8 +573,8 @@ public void onIntellitype(int i) {
  * @param text Text to be inserted into the text area.
  */
 public void updateText(String text) {
-	textArea.setText("");
-	textArea.setText(text);
+    textArea.setText("");
+    textArea.setText(text);
 }
 
 /**
@@ -574,7 +585,7 @@ public void updateText(String text) {
  * @return true if string is only comprised of numbers, otherwise false.
  */
 public static boolean containsOnlyNumbers(String str) {
-	return str.matches("[0-9]+");
+    return str.matches("[0-9]+");
 }
 
 }

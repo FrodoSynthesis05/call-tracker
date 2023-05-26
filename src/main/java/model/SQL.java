@@ -39,7 +39,7 @@ private final ConexionDB con;
  * @param ctrl Program controller for linkage.
  */
 public SQL(Controller ctrl) {
-	this.con = new ConexionDB();
+    this.con = new ConexionDB();
 }
 
 /**
@@ -48,7 +48,7 @@ public SQL(Controller ctrl) {
  * @return Established connection.
  */
 public Connection conexion() {
-	return con.conectar();
+    return con.conectar();
 }
 
 /**
@@ -57,7 +57,7 @@ public Connection conexion() {
  * @throws SQLException If connection cannot be successfully closed.
  */
 public void cerrar() throws SQLException {
-	con.closeConnection();
+    con.closeConnection();
 }
 
 /**
@@ -67,19 +67,19 @@ public void cerrar() throws SQLException {
  * @param id Call id to be uploaded.
  */
 public void uploadId(String id) {
-	String idDown = "";
-	try {
-		ResultSet rst = con.leer("SELECT id FROM calls WHERE id = '" + id + "'");
-		while (rst.next()) {
-			idDown = rst.getString("id");
-		}
-		if ("".equals(idDown)) {
-			con.insertar("INSERT INTO calls VALUES('" + id + "'" + "," + null + "," + null + "," + null + "," + null + ")");
-		}
+    String idDown = "";
+    try {
+        ResultSet rst = con.leer("SELECT id FROM calls WHERE id = '" + id + "'");
+        while (rst.next()) {
+            idDown = rst.getString("id");
+        }
+        if ("".equals(idDown)) {
+            con.insertar("INSERT INTO calls VALUES('" + id + "'" + "," + null + "," + null + "," + null + "," + null + ")");
+        }
 
-	} catch (SQLException ex) {
-		Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
-	}
+    } catch (SQLException ex) {
+        Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
+    }
 }
 
 /**
@@ -90,21 +90,21 @@ public void uploadId(String id) {
  * expressed in minutes for ease of calculation.
  */
 public void uploadLength(String id, double length) {
-	String idDown = "";
-	try {
-		ResultSet rst = con.leer("SELECT id FROM calls WHERE id = '" + id + "'");
-		while (rst.next()) {
-			idDown = rst.getString("id");
-		}
-		if ("".equals(idDown)) {
+    String idDown = "";
+    try {
+        ResultSet rst = con.leer("SELECT id FROM calls WHERE id = '" + id + "'");
+        while (rst.next()) {
+            idDown = rst.getString("id");
+        }
+        if ("".equals(idDown)) {
 // con.insertar("INSERT INTO calls VALUES('" + id + "'," + null + "," + null + ",'" + length + "'," + null + "," + null + ")");
-		} else {
-			con.insertar("UPDATE calls SET length = '" + length + "' WHERE id = '" + id + "'");
-		}
+        } else {
+            con.insertar("UPDATE calls SET length = '" + length + "' WHERE id = '" + id + "'");
+        }
 
-	} catch (SQLException ex) {
-		Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
-	}
+    } catch (SQLException ex) {
+        Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
+    }
 }
 
 /**
@@ -115,31 +115,31 @@ public void uploadLength(String id, double length) {
  * @throws IOException If API call is unsuccessful.
  */
 public String pesos(String id) throws IOException {
-	String pesos = "";
-	double apiResult = API();
-	double returnValue = apiResult == 0.0 ? API_Persistence() : apiResult;
-	try {
-		ResultSet rest = con.leer("SELECT " + id + ", dollars * " + returnValue + " AS pesos FROM calls WHERE id = '" + id + "'");
-		while (rest.next()) {
-			pesos = rest.getString("pesos");
-		}
-		if ("".equals(pesos)) {
+    String pesos = "";
+    double apiResult = API();
+    double returnValue = apiResult == 0.0 ? API_Persistence() : apiResult;
+    try {
+        ResultSet rest = con.leer("SELECT " + id + ", dollars * " + returnValue + " AS pesos FROM calls WHERE id = '" + id + "'");
+        while (rest.next()) {
+            pesos = rest.getString("pesos");
+        }
+        if ("".equals(pesos)) {
 
-		} else {
-			double pesosDouble = Math.round(Double.parseDouble(pesos));
-			con.insertar("UPDATE calls SET pesos = " + pesosDouble + "WHERE id = '" + id + "'");
-			Date time = new java.util.Date(System.currentTimeMillis());
-			try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
-				output.append("Updated call " + id + " at " + new SimpleDateFormat("HH:mm:ss").format(time));
-				System.out.println("Updated call " + id + " at " + new SimpleDateFormat("HH:mm:ss").format(time));
-				output.newLine();
-			}
+        } else {
+            double pesosDouble = Math.round(Double.parseDouble(pesos));
+            con.insertar("UPDATE calls SET pesos = " + pesosDouble + "WHERE id = '" + id + "'");
+            Date time = new java.util.Date(System.currentTimeMillis());
+            try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
+                output.append("Updated call " + id + " at " + new SimpleDateFormat("HH:mm:ss").format(time));
+                System.out.println("Updated call " + id + " at " + new SimpleDateFormat("HH:mm:ss").format(time));
+                output.newLine();
+            }
 
-		}
-	} catch (SQLException ex) {
-		Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	return pesos;
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return pesos;
 
 }
 
@@ -153,22 +153,22 @@ public String pesos(String id) throws IOException {
  * API
  */
 public String dollars(String id) throws IOException {
-	String dollars = "";
-	try {
-		ResultSet rst = con.leer("SELECT id, length * 0.14" + "AS dollars FROM calls WHERE id = '" + id + "'");
-		while (rst.next()) {
-			dollars = rst.getString("dollars");
-		}
-		if ("".equals(dollars)) {
+    String dollars = "";
+    try {
+        ResultSet rst = con.leer("SELECT id, length * 0.14" + "AS dollars FROM calls WHERE id = '" + id + "'");
+        while (rst.next()) {
+            dollars = rst.getString("dollars");
+        }
+        if ("".equals(dollars)) {
 
-		} else {
-			con.insertar("UPDATE calls SET dollars = " + dollars + "WHERE id = '" + id + "'");
-		}
-	} catch (SQLException ex) {
-		Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	pesos(id);
-	return dollars;
+        } else {
+            con.insertar("UPDATE calls SET dollars = " + dollars + "WHERE id = '" + id + "'");
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    pesos(id);
+    return dollars;
 }
 
 /**
@@ -178,11 +178,11 @@ public String dollars(String id) throws IOException {
  * @param id Call id to be associated with timestamp.
  */
 public void uploadTimestamp(String time, String id) {
-	try {
-		con.insertar("UPDATE calls SET timestamp = '" + time + "' WHERE id = '" + id + "'");
-	} catch (SQLException ex) {
-		Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
-	}
+    try {
+        con.insertar("UPDATE calls SET timestamp = '" + time + "' WHERE id = '" + id + "'");
+    } catch (SQLException ex) {
+        Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
+    }
 }
 
 /**
@@ -193,38 +193,38 @@ public void uploadTimestamp(String time, String id) {
  * @throws java.io.IOException
  */
 public String readPesos(String id) throws IOException {
-	String pesos = "";
-	double length = 0;
-	try {
-		ResultSet rst = con.leer("SELECT pesos, length FROM calls WHERE id = '" + id + "'");
-		while (rst.next()) {
-			pesos = rst.getString("pesos");
-			length = rst.getDouble("length");
+    String pesos = "";
+    double length = 0;
+    try {
+        ResultSet rst = con.leer("SELECT pesos, length FROM calls WHERE id = '" + id + "'");
+        while (rst.next()) {
+            pesos = rst.getString("pesos");
+            length = rst.getDouble("length");
 
-		}
-		try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
-			if (length == 1) {
-				System.out.println("Call " + id + " had a duration of " + length + " minute and made you $" + pesos + " COP");
-				output.append("Call " + id + " had a duration of " + length + " minute and made you $" + pesos + " COP");
-				output.newLine();
-				System.out.println("-----------------------------");
-				output.append("-----------------------------");
-				output.newLine();
-			} else {
-				System.out.println("Call " + id + " had a duration of " + length + " minutes and made you $" + pesos + " COP");
-				output.append("Call " + id + " had a duration of " + length + " minutes and made you $" + pesos + " COP");
-				output.newLine();
-				System.out.println("-----------------------------");
-				output.append("-----------------------------");
-				output.newLine();
-			}
-		}
+        }
+        try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
+            if (length == 1) {
+                System.out.println("Call " + id + " had a duration of " + length + " minute and made you $" + pesos + " COP");
+                output.append("Call " + id + " had a duration of " + length + " minute and made you $" + pesos + " COP");
+                output.newLine();
+                System.out.println("-----------------------------");
+                output.append("-----------------------------");
+                output.newLine();
+            } else {
+                System.out.println("Call " + id + " had a duration of " + length + " minutes and made you $" + pesos + " COP");
+                output.append("Call " + id + " had a duration of " + length + " minutes and made you $" + pesos + " COP");
+                output.newLine();
+                System.out.println("-----------------------------");
+                output.append("-----------------------------");
+                output.newLine();
+            }
+        }
 
-	} catch (SQLException ex) {
-		Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
-	}
+    } catch (SQLException ex) {
+        Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, ex);
+    }
 
-	return pesos;
+    return pesos;
 }
 
 /**
@@ -237,22 +237,22 @@ public String readPesos(String id) throws IOException {
  * @throws IOException If connection to the API server cannot be established.
  */
 public double API_Persistence() throws MalformedURLException, IOException {
-	ConfigReader configReader = new ConfigReader("config.txt");
-	String key = configReader.getAPIKey(); 
+    ConfigReader configReader = new ConfigReader("config.txt");
+    String key = configReader.getAPIKey();
 
-	URL url = new URL(key);
-	HttpURLConnection request = (HttpURLConnection) url.openConnection();
-	request.connect();
+    URL url = new URL(key);
+    HttpURLConnection request = (HttpURLConnection) url.openConnection();
+    request.connect();
 
-	JsonParser jp = new JsonParser();
-	JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
-	JsonObject jsonobj = root.getAsJsonObject();
+    JsonParser jp = new JsonParser();
+    JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
+    JsonObject jsonobj = root.getAsJsonObject();
 
-	String req_result = (String) jsonobj.get("rates").toString();
-	req_result = req_result.replaceAll("\"COP\":", "").replaceAll("\\{", "").replaceAll("\\}", "");
-	double exchangeRate = Double.parseDouble(req_result);
-	System.out.println("API has been queried.");
-	return (int) Math.round(exchangeRate / 10.0) * 10.0;
+    String req_result = (String) jsonobj.get("rates").toString();
+    req_result = req_result.replaceAll("\"COP\":", "").replaceAll("\\{", "").replaceAll("\\}", "");
+    double exchangeRate = Double.parseDouble(req_result);
+    System.out.println("API has been queried.");
+    return (int) Math.round(exchangeRate / 10.0) * 10.0;
 
 }
 
@@ -265,31 +265,31 @@ public double API_Persistence() throws MalformedURLException, IOException {
  * connection to the API server cannot be established.
  */
 public Double API() throws MalformedURLException, IOException {
-	String key = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd/cop.json";
+    String key = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd/cop.json";
 
-	URL url = new URL(key);
-	HttpURLConnection request = (HttpURLConnection) url.openConnection();
-	request.connect();
+    URL url = new URL(key);
+    HttpURLConnection request = (HttpURLConnection) url.openConnection();
+    request.connect();
 
-	JsonParser jp = new JsonParser();
-	JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
-	JsonObject jsonobj = root.getAsJsonObject();
+    JsonParser jp = new JsonParser();
+    JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
+    JsonObject jsonobj = root.getAsJsonObject();
 
-	String req_result = (String) jsonobj.get("cop").toString();
-	req_result = req_result.replaceAll("\"COP\":", "").replaceAll("\\{", "").replaceAll("\\}", "");
-	double exchangeRate = Double.parseDouble(req_result);
-	//System.out.println("API has been queried.");
-	Double ret = Math.round(exchangeRate / 10.0) * 10.0;
-	if (ret != null) {
-		return ret;
-	} else {
-		try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
-			output.append("Warning: API value is null. Fallback value used and persistance called.");
-			output.newLine();
-			System.out.println("Warning: API value is null. Fallback value used and persistance called.");
-			return 0.0;
-		}
-	}
+    String req_result = (String) jsonobj.get("cop").toString();
+    req_result = req_result.replaceAll("\"COP\":", "").replaceAll("\\{", "").replaceAll("\\}", "");
+    double exchangeRate = Double.parseDouble(req_result);
+    //System.out.println("API has been queried.");
+    Double ret = Math.round(exchangeRate / 10.0) * 10.0;
+    if (ret != null) {
+        return ret;
+    } else {
+        try (BufferedWriter output = new BufferedWriter(new FileWriter("log.txt", true))) {
+            output.append("Warning: API value is null. Fallback value used and persistance called.");
+            output.newLine();
+            System.out.println("Warning: API value is null. Fallback value used and persistance called.");
+            return 0.0;
+        }
+    }
 
 }
 
@@ -302,26 +302,26 @@ public Double API() throws MalformedURLException, IOException {
  * @throws IOException .
  */
 public String queryDay(String date) throws IOException {
-	double pesos;
-	String dollars;
-	String ret = "";
-	double length;
+    double pesos;
+    String dollars;
+    String ret = "";
+    double length;
 //double ER = API();
-	try {
-		ResultSet rst = con.leer("SELECT timestamp, sum(dollars), sum(length), sum(pesos) FROM calls WHERE DATE(timestamp) = '" + date + "'");
-		while (rst.next()) {
-			length = rst.getDouble("sum(length)");
-			dollars = rst.getString("sum(dollars)");
-			pesos = rst.getDouble("sum(pesos)");
-			double dollarsD = Double.parseDouble(dollars);
-			ret = "On date " + date + " you made a total of $" + Math.round(dollarsD) + " dollars which translates to $" + Math.round(pesos) + " pesos and worked for a total of " + length + " minutes.";
+    try {
+        ResultSet rst = con.leer("SELECT timestamp, sum(dollars), sum(length), sum(pesos) FROM calls WHERE DATE(timestamp) = '" + date + "'");
+        while (rst.next()) {
+            length = rst.getDouble("sum(length)");
+            dollars = rst.getString("sum(dollars)");
+            pesos = rst.getDouble("sum(pesos)");
+            double dollarsD = Double.parseDouble(dollars);
+            ret = "On date " + date + " you made a total of $" + Math.round(dollarsD) + " dollars which translates to $" + Math.round(pesos) + " pesos and worked for a total of " + length + " minutes.";
 
-		}
+        }
 
-	} catch (SQLException e) {
-		Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, e);
-	}
-	return ret;
+    } catch (SQLException e) {
+        Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, e);
+    }
+    return ret;
 }
 
 /**
@@ -331,23 +331,23 @@ public String queryDay(String date) throws IOException {
  * @throws IOException
  */
 public String queryCall(String id) throws IOException {
-	double pesos;
-	double length;
-	double dollars;
-	String ret = "";
-	try {
-		ResultSet rst = con.leer("SELECT pesos, length, dollars FROM calls WHERE id = '" + id + "'");
-		while (rst.next()) {
-			pesos = rst.getDouble("pesos");
-			length = rst.getDouble("length");
-			dollars = rst.getDouble("dollars");
-			ret = "Call " + id + " made $" + dollars + " which translates to $" + Math.round(pesos) + " and lasted for " + length + " minutes.";
+    double pesos;
+    double length;
+    double dollars;
+    String ret = "";
+    try {
+        ResultSet rst = con.leer("SELECT pesos, length, dollars FROM calls WHERE id = '" + id + "'");
+        while (rst.next()) {
+            pesos = rst.getDouble("pesos");
+            length = rst.getDouble("length");
+            dollars = rst.getDouble("dollars");
+            ret = "Call " + id + " made $" + dollars + " which translates to $" + Math.round(pesos) + " and lasted for " + length + " minutes.";
 
-		}
-	} catch (SQLException e) {
-		Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, e);
-	}
-	return ret;
+        }
+    } catch (SQLException e) {
+        Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, e);
+    }
+    return ret;
 
 }
 
@@ -359,18 +359,18 @@ public String queryCall(String id) throws IOException {
  */
 public String getTimestamp(String id) throws IOException {
 
-	String timeStamp = "";
+    String timeStamp = "";
 
-	try {
-		ResultSet rst = con.leer("SELECT timestamp FROM calls WHERE id = '" + id + "'");
-		while (rst.next()) {
-			timeStamp = rst.getString("timestamp");
+    try {
+        ResultSet rst = con.leer("SELECT timestamp FROM calls WHERE id = '" + id + "'");
+        while (rst.next()) {
+            timeStamp = rst.getString("timestamp");
 
-		}
-	} catch (SQLException e) {
-		Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, e);
-	}
-	return timeStamp;
+        }
+    } catch (SQLException e) {
+        Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, e);
+    }
+    return timeStamp;
 }
 
 /**
@@ -382,8 +382,8 @@ public String getTimestamp(String id) throws IOException {
  * @throws IOException
  */
 public void override(String id, double length, String pesos, String dollars) throws IOException {
-	uploadLength(id, length);
-	dollars(id);
+    uploadLength(id, length);
+    dollars(id);
 
 }
 
@@ -396,23 +396,23 @@ public void override(String id, double length, String pesos, String dollars) thr
  * @return String containing processed data
  */
 public String queryMonth(int month, int year) {
-	String dollarsStr;
-	String lengthStr;
-	String pesosStr;
-	String ret = "";
-	try {
-		ResultSet rst = con.leer("SELECT sum(length), SUM(pesos), sum(dollars) FROM calls WHERE timestamp >= '" + year + "-" + month + "-01' AND timestamp <= NOW()");
-		while (rst.next()) {
-			dollarsStr = rst.getString("sum(dollars)");
-			lengthStr = rst.getString("sum(length)");
-			pesosStr = rst.getString("sum(pesos)");
-			double dollarsD = Double.parseDouble(dollarsStr);
-			double pesosD = Double.parseDouble(pesosStr);
-			ret = "So far this month you have made $" + Math.round(dollarsD) + " USD which translates to $" + Math.round(pesosD) + "  COP and have been on the phone for a grand total of " + lengthStr + " minutes.";
-		}
-	} catch (SQLException e) {
-		Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, e);
-	}
-	return ret;
+    String dollarsStr;
+    String lengthStr;
+    String pesosStr;
+    String ret = "";
+    try {
+        ResultSet rst = con.leer("SELECT sum(length), SUM(pesos), sum(dollars) FROM calls WHERE timestamp >= '" + year + "-" + month + "-01' AND timestamp <= NOW()");
+        while (rst.next()) {
+            dollarsStr = rst.getString("sum(dollars)");
+            lengthStr = rst.getString("sum(length)");
+            pesosStr = rst.getString("sum(pesos)");
+            double dollarsD = Double.parseDouble(dollarsStr);
+            double pesosD = Double.parseDouble(pesosStr);
+            ret = "So far this month you have made $" + Math.round(dollarsD) + " USD which translates to $" + Math.round(pesosD) + "  COP and have been on the phone for a grand total of " + lengthStr + " minutes.";
+        }
+    } catch (SQLException e) {
+        Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, e);
+    }
+    return ret;
 }
 }

@@ -21,39 +21,39 @@ private String APIKey;
 private String tesseract;
 
 public ConfigReader(String filePath) {
-	readConfigFile(filePath);
+    readConfigFile(filePath);
 }
 
 public String getExecutablePath() {
-	return executablePath;
+    return executablePath;
 }
 
 public String getDestinationFolder() {
-	return destinationFolder;
+    return destinationFolder;
 }
 
 public String getIconPackPath() {
-	return iconPackPath;
+    return iconPackPath;
 }
 
 public String getAPIKey() {
-	return APIKey;
+    return APIKey;
 }
 
 public String getTesseract() {
-	return tesseract;
+    return tesseract;
 }
 
 private void readConfigFile(String filePath) {
-	try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-		executablePath = reader.readLine().replace("\\", "//");
-		destinationFolder = reader.readLine().replace("\\", "//");
-		iconPackPath = reader.readLine().replace("\\", "//");
-		APIKey = reader.readLine();
-		tesseract = reader.readLine().replace("\\", "//");
-	} catch (IOException e) {
-		System.out.println("An error occurred while reading the config.txt file.");
-	}
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        executablePath = reader.readLine().replace("\\", "//");
+        destinationFolder = reader.readLine().replace("\\", "//");
+        iconPackPath = reader.readLine().replace("\\", "//");
+        APIKey = reader.readLine();
+        tesseract = reader.readLine().replace("\\", "//");
+    } catch (IOException e) {
+        System.out.println("An error occurred while reading the config.txt file.");
+    }
 }
 
 }
