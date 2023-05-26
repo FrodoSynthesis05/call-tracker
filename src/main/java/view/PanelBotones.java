@@ -56,6 +56,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import model.ConfigReader;
 
 /**
  * Initializes buttons to be added to the panel.
@@ -82,7 +83,9 @@ private JTextField pesosField;
 private JTextField dollarsField;
 private JTextField idField;
 private int checker = 0;
-
+private final static ConfigReader configReader = new ConfigReader("config.txt");
+private final static String iconPackPath = configReader.getIconPackPath();
+private final static String tesseract = configReader.getTesseract();
 /**
  * Class constructor.
  */
@@ -147,7 +150,7 @@ public void actionPerformed(ActionEvent e) {
 				if (containsOnlyNumbers(result)) {
 					checker = 1;
 					execute();
-					String path = "D://WorkCalculator//Work//src//main//java//resources//start.wav";
+					String path = iconPackPath + "//start.wav";
 					reminder(path);
 				}
 			} else if (checker == 1) {
@@ -229,7 +232,7 @@ public void ActionPerformed(ActionEvent a) throws IOException {
 				ctrl.timestamp(out, sc.getTimeStamp());
 
 				try {
-					String path = "D://WorkCalculator//Work//src//main//java//resources//sound.wav";
+					String path = iconPackPath + "//sound.wav";
 					reminder(path);
 					checker = 0;
 				} catch (UnsupportedAudioFileException | IOException | InterruptedException ex) {
@@ -286,7 +289,7 @@ public void reminder(String path) throws UnsupportedAudioFileException, IOExcept
 public static String Tesseract(File Image) throws TesseractException, IOException {
 	Rectangle bounds = new Rectangle(245, 328, 73, 20);
 	Tesseract tess = new Tesseract();
-	String tessPath = "D://OpenCV//TesseractOCR//tesseract//Code//tesseract-main//tesseract-main//tessdata";
+	String tessPath = tesseract;
 	tess.setDatapath(tessPath);
 	String text = tess.doOCR(Image, bounds);
 
@@ -351,7 +354,7 @@ public void onHotKey(int i) {
 //textField.setBorder(BorderFactory.createLineBorder(Color.black));
 			JFrame newFrame = new JFrame("Income");
 			try {
-				newFrame.setIconImage(ImageIO.read(new File("D://WorkCalculator//Work//src//main//java//resources//icon.png")));
+				newFrame.setIconImage(ImageIO.read(new File(iconPackPath + "//icon.png")));
 			} catch (IOException ex) {
 				Logger.getLogger(PanelBotones.class.getName()).log(Level.SEVERE, null, ex);
 			}
