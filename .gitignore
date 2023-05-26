@@ -1,6 +1,6 @@
-SQL.java
 /target
 log.txt
+config.txt
 # Compiled class file
 *.class
 

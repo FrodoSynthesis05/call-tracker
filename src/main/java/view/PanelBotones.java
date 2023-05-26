@@ -37,7 +37,6 @@ import com.melloware.jintellitype.IntellitypeListener;
 import com.melloware.jintellitype.JIntellitype;
 import javax.swing.JFrame;
 import com.toedter.calendar.JCalendar;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;

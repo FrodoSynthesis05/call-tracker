@@ -43,7 +43,11 @@ import org.apache.commons.io.FileUtils;
  */
 public class Work extends JFrame {
 
-File path = new File("D:/WorkCalculator/images");
+private final static ConfigReader configReader = new ConfigReader("config.txt");
+private final static String executablePath = configReader.getExecutablePath();
+private final static String destinationFolder = configReader.getDestinationFolder();
+private final static String iconPackPath = configReader.getIconPackPath();
+File path = new File(destinationFolder);
 
 PanelBotones pnlBotones = new PanelBotones();
 
@@ -53,8 +57,10 @@ PanelBotones pnlBotones = new PanelBotones();
  * @throws java.io.IOException
  */
 public Work() throws IOException {
+
 	try {
-		setIconImage(ImageIO.read(new File("D://WorkCalculator//Work//src//main//java//resources//stopwatch.png")));
+		String stonksPath = iconPackPath + "//stonks.png";
+		setIconImage(ImageIO.read(new File(stonksPath)));
 	} catch (IOException ex) {
 		Logger.getLogger(Work.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -104,17 +110,27 @@ public Work() throws IOException {
  */
 @SuppressWarnings("null")
 public static void main(String[] args) {
+
 	BufferedWriter output = null;
+	BufferedWriter config = null;
+
 	try {
 		output = new BufferedWriter(new FileWriter("log.txt", true));
+		config = new BufferedWriter(new FileWriter("config.txt", true));
 		try {
 
 			if (processCheck("httpd.exe") == false) {
-				File file = new File("S://WAMP//wampmanager.exe");
+				File file = new File(executablePath);
 				Desktop.getDesktop().open(file);
 				Thread.sleep(10000);
 			} else {
 				File f = new File("log.txt");
+				File c = new File("config.txt");
+				if (c.exists() && !c.isDirectory()) {
+
+				} else {
+
+				}
 				if (f.exists() && !f.isDirectory()) {
 
 				} else {
@@ -158,7 +174,8 @@ private static void createTrayIcon() {
 	try {
 
 		SystemTray tray = SystemTray.getSystemTray();
-		Image image = Toolkit.getDefaultToolkit().getImage("D://WorkCalculator//Work//src//main//java//resources//stopwatch.png");
+		String stopwatchPath = iconPackPath + "//stopwatch.png";
+		Image image = Toolkit.getDefaultToolkit().getImage(stopwatchPath);
 		PopupMenu popupMenu = new PopupMenu();
 
 		MenuItem websiteMenuItem = new MenuItem("Open Database");
@@ -181,6 +198,19 @@ private static void createTrayIcon() {
 			}
 		});
 		popupMenu.add(deleteScreenshotsMenuItem);
+
+		MenuItem openFolderItem = new MenuItem("Open Screenshot Folder");
+
+		openFolderItem.addActionListener(e -> {
+
+			try {
+
+				Runtime.getRuntime().exec("explorer.exe /select," + destinationFolder);
+			} catch (IOException ex) {
+			}
+		});
+
+		popupMenu.add(openFolderItem);
 
 		MenuItem exitMenuItem = new MenuItem("Exit");
 		exitMenuItem.addActionListener(e -> System.exit(0));
