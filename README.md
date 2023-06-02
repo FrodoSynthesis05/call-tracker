@@ -4,19 +4,19 @@
 The Call Center Tracking Software is a Java program developed to track daily earnings for interpreters who are paid by the minute. This software provides a solution for companies without an internal tracking tool. The program utilizes Java and Maven for development and includes various features to streamline the tracking process.
 
 # Features
-Dark-themed user interface using MaterialLookAndFeel.
-Window accessed through a hotkey to query the database for daily earnings and call details.
-Override window for modifying call information.
-Start behavior triggers an internal timer and captures a screenshot of the main monitor.
-Optical Character Recognition (OCR) using Tesseract to extract call ID from the screenshot.
-Call ID is uploaded to a locally hosted SQL database.
-Hotkey support with JIntellitype for system-wide commands.
-Stop behavior calculates the monetary value of the call based on its duration.
-Real-time exchange rate conversion from US Dollars to Colombian Pesos using a custom API.
-Database management with phpMyAdmin to query call information.
-SQL statements for calculating estimated daily, monthly, and yearly income.
-System tray icon with options to access the tool, clear screenshots, and quit.
-Double-click system tray icon to show/hide the Start/Stop button UI.
+- Dark-themed user interface using MaterialLookAndFeel.
+- Window accessed through a hotkey to query the database for daily earnings and call details.
+- Override window for modifying call information.
+- Start behavior triggers an internal timer and captures a screenshot of the main monitor.
+- Optical Character Recognition (OCR) using Tesseract to extract call ID from the screenshot.
+- Call ID is uploaded to a locally hosted SQL database.
+- Hotkey support with JIntellitype for system-wide commands.
+- Stop behavior calculates the monetary value of the call based on its duration.
+- Real-time exchange rate conversion from US Dollars to Colombian Pesos using a custom API.
+- Database management with phpMyAdmin to query call information.
+- SQL statements for calculating estimated daily, monthly, and yearly income.
+- System tray icon with options to access the tool, clear screenshots, and quit.
+- Double-click system tray icon to show/hide the Start/Stop button UI.
 # Prerequisites
 Before using the Call Center Tracking Software, make sure you have the following:
 
