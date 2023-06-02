@@ -20,43 +20,43 @@ The Call Center Tracking Software is a Java program developed to track daily ear
 # Prerequisites
 Before using the Call Center Tracking Software, make sure you have the following:
 
-Java JDK installed.
-Maven installed.
-WAMP server installed and configured.
-Tesseract OCR engine installed.
-API key for openexchangerates.com (required for real-time exchange rate conversion).
+- Java JDK installed.
+- Maven installed.
+- WAMP server installed and configured.
+- Tesseract OCR engine installed.
+- API key for openexchangerates.com (required for real-time exchange rate conversion).
 
 # Usage
-Copy the path for wampmanager.exe and paste it into the config.txt file.
-Set the destination path for storing images in the config.txt file.
-Set the path to the iconpack folder in the config.txt file.
-Set the openexchangerates.com API key in the config.txt file.
-Set the path to the tessdata folder in the OCR engine installation directory in the config.txt file.
-Run the SQL script (script.sql) to create the required database.
-Launch the Call Center Tracking Software.
-Use the hotkeys to open the query window or the override window.
-Start the behavior by pressing the ";" key and stop it by pressing the "'" key.
-Access call information and perform calculations using phpMyAdmin.
-Customize the software through the system tray icon.
+1. Copy the path for wampmanager.exe and paste it into the config.txt file.
+2. Set the destination path for storing images in the config.txt file.
+3. Set the path to the iconpack folder in the config.txt file.
+4. Set the openexchangerates.com API key in the config.txt file.
+5. Set the path to the tessdata folder in the OCR engine installation directory in the config.txt file.
+6. Run the SQL script (script.sql) to create the required database.
+7. Launch the Call Center Tracking Software.
+8. Use the hotkeys to open the query window or the override window.
+9. Start the behavior by pressing the ";" key and stop it by pressing the "'" key.
+10. Access call information and perform calculations using phpMyAdmin.
+11. Customize the software through the system tray icon.
 # Troubleshooting
 
 If you encounter any issues while using the Call Center Tracking Software, consider the following:
 
-Verify that Java JDK and Maven are installed correctly.
-Check the WAMP server configuration and ensure it is running.
-Make sure the Tesseract OCR engine is installed properly.
-Ensure the paths in the config.txt file are correct.
-Verify the availability and validity of the openexchangerates.com API key.
+- Verify that Java JDK and Maven are installed correctly.
+- Check the WAMP server configuration and ensure it is running.
+- Make sure the Tesseract OCR engine is installed properly.
+- Ensure the paths in the config.txt file are correct.
+- Verify the availability and validity of the openexchangerates.com API key.
 # License
 The Call Center Tracking Software is released under the MIT License. See the [LICENSE](https://github.com/FrodoSynthesis05/call-tracker/blob/master/LICENSE) file for more details.
 
 # Credits
 The Call Center Tracking Software was developed by [Your Name]. It incorporates various libraries and resources, including:
 
-MaterialLookAndFeel for the dark-themed user interface.
-JIntellitype for system-wide hotkey support.
-Tesseract OCR engine for optical character recognition.
-[currency-api](https://github.com/fawazahmed0/currency-api for real-time exchange rate information.
+- MaterialLookAndFeel for the dark-themed user interface.
+- JIntellitype for system-wide hotkey support.
+- Tesseract OCR engine for optical character recognition.
+- [currency-api](https://github.com/fawazahmed0/currency-api for real-time exchange rate information.
 # Contributing
 Contributions to the Call Center Tracking Software are welcome! If you find any bugs, have feature requests, or would like to contribute enhancements, please submit an issue or a pull request.
 
