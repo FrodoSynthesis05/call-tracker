@@ -56,7 +56,7 @@ The Call Center Tracking Software was developed by [Your Name]. It incorporates 
 - MaterialLookAndFeel for the dark-themed user interface.
 - JIntellitype for system-wide hotkey support.
 - Tesseract OCR engine for optical character recognition.
-- [currency-api](https://github.com/fawazahmed0/currency-api for real-time exchange rate information.
+- [currency-api](https://github.com/fawazahmed0/currency-api) for real-time exchange rate information.
 # Contributing
 Contributions to the Call Center Tracking Software are welcome! If you find any bugs, have feature requests, or would like to contribute enhancements, please submit an issue or a pull request.
 
