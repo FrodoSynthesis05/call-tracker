@@ -405,12 +405,11 @@ public String queryMonth(int month, int year) {
         while (rst.next()) {
             dollarsStr = rst.getString("sum(dollars)");
             lengthStr = rst.getString("sum(length)");
-            pesosStr = rst.getString("sum(pesos)");
             double dollarsD = Double.parseDouble(dollarsStr);
-            double pesosD = Double.parseDouble(pesosStr);
+            double pesosD = dollarsD * API();
             ret = "So far this month you have made $" + Math.round(dollarsD) + " USD which translates to $" + Math.round(pesosD) + "  COP and have been on the phone for a grand total of " + lengthStr + " minutes.";
         }
-    } catch (SQLException e) {
+    } catch (SQLException | IOException e) {
         Logger.getLogger(SQL.class.getName()).log(Level.SEVERE, null, e);
     }
     return ret;
