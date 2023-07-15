@@ -61,7 +61,7 @@ The Call Center Tracking Software was developed by Julian Baquero. It incorporat
 Contributions to the Call Center Tracking Software are welcome! If you find any bugs, have feature requests, or would like to contribute enhancements, please submit an issue or a pull request.
 
 # Feedback
-I appreciate your feedback! If you have any questions, suggestions, or comments, please feel free to [contact us/email us/etc.].
+I appreciate your feedback! If you have any questions, suggestions, or comments, please feel free to contact me.
 
 # Acknowledgments
 I would like to express my gratitude to the developers of the WAMP server, Tesseract OCR engine, and all the libraries used in this project for their contributions.
