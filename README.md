@@ -51,7 +51,7 @@ If you encounter any issues while using the Call Center Tracking Software, consi
 The Call Center Tracking Software is released under the MIT License. See the [LICENSE](https://github.com/FrodoSynthesis05/call-tracker/blob/master/LICENSE) file for more details.
 
 # Credits
-The Call Center Tracking Software was developed by [Your Name]. It incorporates various libraries and resources, including:
+The Call Center Tracking Software was developed by Julian Baquero. It incorporates various libraries and resources, including:
 
 - MaterialLookAndFeel for the dark-themed user interface.
 - JIntellitype for system-wide hotkey support.
